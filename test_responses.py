@@ -947,7 +947,7 @@ def test_cookie_attribute_handling():
         "domain=.stackoverflow.com",
         "expires=Fri, 01-Jan-2055 00:00:00 GMT",
         "path=/",
-        "HttpOnly"
+        "HttpOnly",
     ]
     cookie_text = "; ".join(cookie_attributes)
     headers = {"set-cookie": cookie_text}
