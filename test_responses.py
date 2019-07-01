@@ -69,9 +69,7 @@ def test_response_encoded():
 def test_response_with_instance():
     @responses.activate
     def run():
-        responses.add(
-            responses.Response(method=responses.GET, url="http://example.com")
-        )
+        responses.add(responses.Response(method=responses.GET, url="http://example.com"))
         resp = requests.get("http://example.com")
         assert_response(resp, "")
         assert len(responses.calls) == 1
@@ -89,14 +87,9 @@ def test_response_with_instance():
         ("http://example.com/two", "http://example.com/two"),
         (
             Response(method=responses.GET, url="http://example.com/two"),
-            Response(
-                method=responses.GET, url="http://example.com/two", body="testtwo"
-            ),
+            Response(method=responses.GET, url="http://example.com/two", body="testtwo"),
         ),
-        (
-            re.compile(r"http://example\.com/two"),
-            re.compile(r"http://example\.com/two"),
-        ),
+        (re.compile(r"http://example\.com/two"), re.compile(r"http://example\.com/two")),
     ],
 )
 def test_replace(original, replacement):
@@ -110,9 +103,7 @@ def test_replace(original, replacement):
             responses.add(responses.GET, original, body="test2")
 
         responses.add(responses.GET, "http://example.com/three", body="test3")
-        responses.add(
-            responses.GET, re.compile(r"http://example\.com/four"), body="test3"
-        )
+        responses.add(responses.GET, re.compile(r"http://example\.com/four"), body="test3")
 
         if isinstance(replacement, BaseResponse):
             responses.replace(replacement)
@@ -176,13 +167,7 @@ def test_remove():
         ((responses.GET, "a"), {}, (responses.GET, "a"), {}, True),
         ((responses.GET, "a"), {}, (responses.GET, "b"), {}, False),
         ((responses.GET, "a"), {}, (responses.POST, "a"), {}, False),
-        (
-            (responses.GET, "a"),
-            {"match_querystring": True},
-            (responses.GET, "a"),
-            {},
-            True,
-        ),
+        ((responses.GET, "a"), {"match_querystring": True}, (responses.GET, "a"), {}, True),
     ],
 )
 def test_response_equality(args1, kwargs1, args2, kwargs2, expected):
@@ -235,9 +220,7 @@ def test_match_querystring():
 def test_match_empty_querystring():
     @responses.activate
     def run():
-        responses.add(
-            responses.GET, "http://example.com", body=b"test", match_querystring=True
-        )
+        responses.add(responses.GET, "http://example.com", body=b"test", match_querystring=True)
         resp = requests.get("http://example.com")
         assert_response(resp, "test")
         resp = requests.get("http://example.com/")
@@ -252,9 +235,7 @@ def test_match_empty_querystring():
 def test_match_querystring_error():
     @responses.activate
     def run():
-        responses.add(
-            responses.GET, "http://example.com/?test=1", match_querystring=True
-        )
+        responses.add(responses.GET, "http://example.com/?test=1", match_querystring=True)
 
         with pytest.raises(ConnectionError):
             requests.get("http://example.com/foo/?test=2")
@@ -300,18 +281,14 @@ def test_match_querystring_error_regex():
         regular expression"""
 
         responses.add(
-            responses.GET,
-            re.compile(r"http://example\.com/foo/\?test=1"),
-            match_querystring=True,
+            responses.GET, re.compile(r"http://example\.com/foo/\?test=1"), match_querystring=True
         )
 
         with pytest.raises(ConnectionError):
             requests.get("http://example.com/foo/?test=3")
 
         responses.add(
-            responses.GET,
-            re.compile(r"http://example\.com/foo/\?test=2"),
-            match_querystring=False,
+            responses.GET, re.compile(r"http://example\.com/foo/\?test=2"), match_querystring=False
         )
 
         with pytest.raises(ConnectionError):
@@ -572,13 +549,9 @@ def test_activate_doesnt_change_signature():
 
     decorated_test_function = responses.activate(test_function)
     if hasattr(inspect, "signature"):
-        assert inspect.signature(test_function) == inspect.signature(
-            decorated_test_function
-        )
+        assert inspect.signature(test_function) == inspect.signature(decorated_test_function)
     else:
-        assert inspect.getargspec(test_function) == inspect.getargspec(
-            decorated_test_function
-        )
+        assert inspect.getargspec(test_function) == inspect.getargspec(decorated_test_function)
     assert decorated_test_function(1, 2) == test_function(1, 2)
     assert decorated_test_function(3) == test_function(3)
 
@@ -590,13 +563,9 @@ def test_activate_mock_interaction():
 
     decorated_test_function = responses.activate(test_function)
     if hasattr(inspect, "signature"):
-        assert inspect.signature(test_function) == inspect.signature(
-            decorated_test_function
-        )
+        assert inspect.signature(test_function) == inspect.signature(decorated_test_function)
     else:
-        assert inspect.getargspec(test_function) == inspect.getargspec(
-            decorated_test_function
-        )
+        assert inspect.getargspec(test_function) == inspect.getargspec(decorated_test_function)
 
     value = test_function()
     assert isinstance(value, Mock)
@@ -617,13 +586,9 @@ def test_activate_doesnt_change_signature_with_return_type():
 
     decorated_test_function = responses.activate(test_function)
     if hasattr(inspect, "signature"):
-        assert inspect.signature(test_function) == inspect.signature(
-            decorated_test_function
-        )
+        assert inspect.signature(test_function) == inspect.signature(decorated_test_function)
     else:
-        assert inspect.getargspec(test_function) == inspect.getargspec(
-            decorated_test_function
-        )
+        assert inspect.getargspec(test_function) == inspect.getargspec(decorated_test_function)
     assert decorated_test_function(1, 2) == test_function(1, 2)
     assert decorated_test_function(3) == test_function(3)
 
@@ -811,9 +776,7 @@ def test_handles_unicode_url():
 def test_headers():
     @responses.activate
     def run():
-        responses.add(
-            responses.GET, "http://example.com", body="", headers={"X-Test": "foo"}
-        )
+        responses.add(responses.GET, "http://example.com", body="", headers={"X-Test": "foo"})
         resp = requests.get("http://example.com")
         assert resp.headers["X-Test"] == "foo"
 
@@ -825,10 +788,7 @@ def test_legacy_adding_headers():
     @responses.activate
     def run():
         responses.add(
-            responses.GET,
-            "http://example.com",
-            body="",
-            adding_headers={"X-Test": "foo"},
+            responses.GET, "http://example.com", body="", adding_headers={"X-Test": "foo"}
         )
         resp = requests.get("http://example.com")
         assert resp.headers["X-Test"] == "foo"
@@ -948,4 +908,3 @@ def test_cookie_attribute_handling():
     cookiejar = responses._cookies_from_headers(headers)
     assert cookiejar.list_domains() == expected_domains
     assert cookiejar.list_paths() == expected_paths
-    
