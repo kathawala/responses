@@ -945,9 +945,7 @@ def test_cookie_attribute_handling():
     cookie_text = 'prov=c83dc7dc-e0b9-xxxx-xxxx-xxxxxxxxxxxx; domain=.stackoverflow.com;'
     cookie_text = cookie_text + ' expires=Fri, 01-Jan-2055 00:00:00 GMT; path=/; HttpOnly'
     headers = {'set-cookie': cookie_text}
-    print(headers)
     cookiejar = responses._cookies_from_headers(headers)
-    print(cookiejar.__dict__)
     assert cookiejar.list_domains() == expected_domains
     assert cookiejar.list_paths() == expected_paths
     
