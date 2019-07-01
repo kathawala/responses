@@ -938,6 +938,7 @@ def test_cookies_from_headers():
         assert isinstance(v, str)
         assert v == expected[k]
 
+
 def test_cookie_attribute_handling():
     expected_domains = ['.stackoverflow.com']
     expected_paths = ['/']
