@@ -950,8 +950,9 @@ def test_cookie_attribute_handling():
     cookie_text = "; ".join(k + "=" + v for k,v in cookie_attributes.items())
     cookie_text = cookie_text + "; HttpOnly"
     headers = {'set-cookie': cookie_text}
+    print(headers)
     cookiejar = responses._cookies_from_headers(headers)
-    print(cookiejar)
+    print(cookiejar.__dict__)
     assert cookiejar.list_domains() == expected_domains
     assert cookiejar.list_paths() == expected_paths
     
